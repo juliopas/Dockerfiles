@@ -17,6 +17,7 @@ RUN apt-get update && \
         libboost-all-dev \
         fftw3-dev \
         libfftw3-mpi-dev \
+        libopenmpi3 \
         git \
         
     && \
