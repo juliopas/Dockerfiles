@@ -7,24 +7,24 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Install system dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    build-essential \
-    cmake \
-    ninja-build \
-    python3-venv \
-    python3-dev \
-    python3-pip \
-    openmpi-bin \
-    libboost-all-dev \
-    fftw3-dev \
-    libfftw3-mpi-dev \
-    git \
+        build-essential \
+        cmake \
+        ninja-build \
+        python3-venv \
+        python3-dev \
+        python3-pip \
+        openmpi-bin \
+        libboost-all-dev \
+        fftw3-dev \
+        libfftw3-mpi-dev \
+        git \
+        # libgl1-mesa-dev \
+        # libglu1-mesa-dev \
+        # libosmesa6-dev \
+        # ffmpeg \
+    && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
-
-# libgl1-mesa-dev \
-# libglu1-mesa-dev \
-# libosmesa6-dev \
-# ffmpeg && \
 
 # Set up a user
 RUN useradd -m -s /bin/bash julio
