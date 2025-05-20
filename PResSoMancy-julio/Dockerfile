@@ -18,6 +18,7 @@ RUN apt-get update && \
         fftw3-dev \
         libfftw3-mpi-dev \
         libopenmpi3 \
+        libevent-2.1-7 \
         git \
         
     && \
