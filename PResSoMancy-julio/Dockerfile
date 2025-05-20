@@ -18,12 +18,13 @@ RUN apt-get update && \
     fftw3-dev \
     libfftw3-mpi-dev \
     git \
-    # libgl1-mesa-dev \
-    # libglu1-mesa-dev \
-    # libosmesa6-dev \
-    # ffmpeg && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+# libgl1-mesa-dev \
+# libglu1-mesa-dev \
+# libosmesa6-dev \
+# ffmpeg && \
 
 # Set up a user
 RUN useradd -m -s /bin/bash julio
