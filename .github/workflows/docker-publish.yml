@@ -33,6 +33,13 @@ jobs:
       # with sigstore/fulcio when running outside of PRs.
       id-token: write
 
+    strategy:
+      matrix:
+        include:
+          - name: PResSoMancy-julio
+            dockerfile: PResSoMancy-julio/Dockerfile
+            context: PResSoMancy-julio
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
