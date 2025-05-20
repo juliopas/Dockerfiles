@@ -70,13 +70,10 @@ RUN apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Set environment variables for Espresso
 ENV PYTHONPATH="/home/julio/espresso/build/src/python"
-ENV ESPRESSOPATH="/home/julio/espresso/build/"
+ENV ESPRESSOPATH="/home/julio/espresso/build"
+ENV PYPRESSO="/home/julio/espresso/build/pypresso"
 ENV OMPI_ALLOW_RUN_AS_ROOT=1
 ENV OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1
-
-# (Optional) Append environment settings to the bashrc
-RUN echo 'export ESPRESSOPATH="/home/julio/espresso/build/"' >> /home/julio/.bashrc
-RUN echo 'export PYPRESSO="/home/julio/espresso/build/pypresso"' >> /home/julio/.bashrc
 
 # Ensure the final user has full control of its home
 RUN chown -R julio:julio /home/julio
