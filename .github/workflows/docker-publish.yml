@@ -5,7 +5,8 @@ on:
     - cron: '32 13 * * *'
   push:
     branches: [ "main" ]
-    tags: [ 'v*.*.*' ]
+    # You can remove tags from triggers or keep if you want
+    # tags: [ 'v*.*.*' ]
   pull_request:
     branches: [ "main" ]
 
@@ -50,12 +51,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract Docker metadata
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_BASE_NAME }}-${{ matrix.name }}
-
+      # Build and push with explicit "latest" tag (no version tags)
       - name: Build and push Docker image
         id: build-and-push
         uses: docker/build-push-action@v5
@@ -63,14 +59,15 @@ jobs:
           context: ${{ matrix.context }}
           file: ${{ matrix.dockerfile }}
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_BASE_NAME }}-${{ matrix.name }}:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      # Sign the image digest (normal cosign sign, no attestation)
       - name: Sign the published Docker image
         if: github.event_name != 'pull_request'
         env:
-          TAGS: ${{ steps.meta.outputs.tags }}
+          IMAGE_TAG: ${{ env.REGISTRY }}/${{ env.IMAGE_BASE_NAME }}-${{ matrix.name }}:latest
           DIGEST: ${{ steps.build-and-push.outputs.digest }}
-        run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
+        run: |
+          cosign sign --yes ${IMAGE_TAG}@${DIGEST}
