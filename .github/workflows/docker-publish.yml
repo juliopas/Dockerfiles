@@ -21,7 +21,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - name: PResSoMancy-julio
+          - name: pressomancy-julio
             dockerfile: PResSoMancy-julio/Dockerfile
             context: PResSoMancy-julio
 
