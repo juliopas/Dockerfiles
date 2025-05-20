@@ -18,10 +18,7 @@ RUN apt-get update && \
         fftw3-dev \
         libfftw3-mpi-dev \
         git \
-        # libgl1-mesa-dev \
-        # libglu1-mesa-dev \
-        # libosmesa6-dev \
-        # ffmpeg \
+        
     && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
@@ -74,6 +71,9 @@ ENV ESPRESSOPATH="/home/julio/espresso/build"
 ENV PYPRESSO="/home/julio/espresso/build/pypresso"
 ENV OMPI_ALLOW_RUN_AS_ROOT=1
 ENV OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1
+
+# Set environment variables for mpirun
+ENV LD_LIBRARY_PATH=/lib/x86_64-linux-gnu:/usr/lib:/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
 
 # Ensure the final user has full control of its home
 RUN chown -R julio:julio /home/julio
