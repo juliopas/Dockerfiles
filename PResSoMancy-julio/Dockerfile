@@ -62,7 +62,7 @@ RUN git clone --branch main https://github.com/juliopas/pressomancy.git && \
 
 # Make working directories
 ENV DATABIND="/home/julio/DATA"
-RUN mkdir DATABIND
+RUN mkdir -p $DATABIND
 
 # Cleanup
 RUN rm -rf /var/cache/* /tmp/* /var/log/* /usr/share/doc/*
