@@ -61,8 +61,8 @@ RUN git clone --branch main https://github.com/juliopas/pressomancy.git && \
     pip install -e .
 
 # Make working directories
-RUN mkdir DATA
-ENV DATA="/home/julio/DATA"
+ENV DATABIND="/home/julio/DATA"
+RUN mkdir DATABIND
 
 # Cleanup
 RUN rm -rf /var/cache/* /tmp/* /var/log/* /usr/share/doc/*
