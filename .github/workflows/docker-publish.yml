@@ -24,6 +24,9 @@ jobs:
           - name: pressomancy-julio
             dockerfile: PResSoMancy-julio/Dockerfile
             context: PResSoMancy-julio
+          - name: dev_mae-pressomancy
+            dockerfile: dev_MAE-pressomancy/Dockerfile
+            context: dev_MAE-pressomancy
 
     permissions:
       contents: read
