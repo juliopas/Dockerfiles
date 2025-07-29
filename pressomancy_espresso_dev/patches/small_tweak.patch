@@ -1,0 +1,51 @@
+diff --git a/src/core/magnetostatics/dipolar_direct_sum_gpu_cuda.cu b/src/core/magnetostatics/dipolar_direct_sum_gpu_cuda.cu
+index d8f4237fb..be0f6c7f6 100644
+--- a/src/core/magnetostatics/dipolar_direct_sum_gpu_cuda.cu
++++ b/src/core/magnetostatics/dipolar_direct_sum_gpu_cuda.cu
+@@ -66,6 +66,18 @@ __device__ void dipole_ia_force(float pf, float const dr[3], float const *dip1,
+ ) {
+   // Powers of distance
+   auto const r_sq = scalar_product(dr, dr);
++  if (r_sq == 0.0f) {
++    f1[0] = f1[1] = f1[2] = 0.0f;
++#ifdef ROTATION
++    torque1[0] = torque1[1] = torque1[2] = 0.0f;
++    torque2[0] = torque2[1] = torque2[2] = 0.0f;
++#endif
++#ifdef DIPOLE_FIELD_TRACKING
++    dip_fld1[0] = dip_fld1[1] = dip_fld1[2] = 0.0f;
++    dip_fld2[0] = dip_fld2[1] = dip_fld2[2] = 0.0f;
++#endif
++    return;
++  }
+   auto const r_sq_inv = 1.0f / r_sq;
+   auto const r_inv = rsqrtf(r_sq);
+   auto const r3_inv = 1.0f / r_sq * r_inv;
+diff --git a/src/core/virtual_sites.cpp b/src/core/virtual_sites.cpp
+index aca88b0d0..8a416c602 100644
+--- a/src/core/virtual_sites.cpp
++++ b/src/core/virtual_sites.cpp
+@@ -107,8 +107,9 @@ calculate_vs_relate_to_params(Particle const &p_vs, Particle const &p_relate_to,
+   constexpr auto const *function_name = location.function_name();
+   constexpr auto *error_msg = "%s: component %u: %f instead of %f\n";
+   Utils::Quaternion<double> qtemp = relate_to_quat * quat;
++  auto const epsilon = 1e-10;
+   for (unsigned int i = 0; i < 4; i++) {
+-    if (fabs(qtemp[i] - quat_director[i]) != 0.) {
++    if (fabs(qtemp[i] - quat_director[i]) >= epsilon) {
+       fprintf(stderr, error_msg, function_name, i, qtemp[i], quat_director[i]);
+     }
+   }
+diff --git a/src/python/espressomd/checkpointing.py b/src/python/espressomd/checkpointing.py
+index f8ccd1067..b573ed902 100644
+--- a/src/python/espressomd/checkpointing.py
++++ b/src/python/espressomd/checkpointing.py
+@@ -43,7 +43,7 @@ class Checkpoint:
+     def __init__(self, checkpoint_id=None, checkpoint_path="."):
+         # check if checkpoint_id is valid (only allow a-z A-Z 0-9 _ -)
+         if not isinstance(checkpoint_id, str) or bool(
+-                re.compile(r"[^a-zA-Z0-9_\-]").search(checkpoint_id)):
++                re.compile(r"[^a-zA-Z0-9_\-.]").search(checkpoint_id)):
+             raise ValueError("Invalid checkpoint id.")
+ 
+         if not isinstance(checkpoint_path, str):
