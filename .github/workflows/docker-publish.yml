@@ -22,12 +22,9 @@ jobs:
     strategy:
       matrix:
         include:
-          - name: pressomancy-julio
-            dockerfile: PResSoMancy-julio/Dockerfile
-            context: PResSoMancy-julio
-          - name: dev_pressomancy
-            dockerfile: dev_pressomancy/Dockerfile
-            context: dev_pressomancy
+          - name: pressomancy-julio-gpu
+            dockerfile: pressomancy_espresso_dev/Dockerfile
+            context: pressomancy_espresso_dev
 
     permissions:
       contents: read
