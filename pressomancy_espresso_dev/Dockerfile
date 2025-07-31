@@ -35,7 +35,8 @@ ENV VIRTUAL_ENV="/home/julio/venv"
 RUN pip install --no-cache-dir \
     numpy \
     scipy \
-    "Cython>=0.29.28,<3.0.12"
+    "Cython>=0.29.28,<3.0.12" \
+    tqdm
 
 # Clone the custom Espresso repository
 RUN git clone --branch dds_gpu_replica_field_tracking https://github.com/stekajack/espresso_patched.git espresso
