@@ -21,6 +21,9 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+# Set up a user
+RUN mkdir -p /home/julio
+ENV HOME="/home/julio"
 WORKDIR /home/julio
 
 # Create and activate a virtual environment
@@ -56,6 +59,8 @@ WORKDIR /home/julio
 RUN git clone --branch dev_MAE-BoS https://github.com/juliopas/pressomancy.git && \
     cd pressomancy && \
     pip install -e .
+
+# Make working directories
 RUN mkdir DATA
 RUN mkdir SCRIPTS
 
